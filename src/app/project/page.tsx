@@ -73,8 +73,8 @@ function ProjectContent() {
          {/* Search Header */}
          {search && (
             <div className="mb-6">
-                <h2 className="text-2xl font-bold">ผลการค้นหา: <span className="text-cyan-500">"{search}"</span></h2>
-                <p className="text-gray-400 text-sm">พบ {filteredVideos.length} รายการ</p>
+                <h2 className="text-2xl font-bold">??????????: <span className="text-cyan-500">"{search}"</span></h2>
+                <p className="text-gray-400 text-sm">?? {filteredVideos.length} ??????</p>
             </div>
          )}
          
@@ -86,8 +86,8 @@ function ProjectContent() {
                 ))
             ) : (
                 <div className="col-span-full h-64 flex flex-col items-center justify-center text-gray-500">
-                    <p className="text-xl font-medium">ไม่พบวิดีโอที่คุณค้นหา</p>
-                    <p className="text-sm mt-2">ลองใช้คำค้นหาอื่น หรือดูรายการทั้งหมด</p>
+                    <p className="text-xl font-medium">??????????????????????</p>
+                    <p className="text-sm mt-2">????????????????? ???????????????????</p>
                 </div>
             )}
          </div>

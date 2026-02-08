@@ -109,7 +109,7 @@ const Carousel = ({ videos = [] }: CarouselProps) => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-        router.push(`/project?search=${encodeURIComponent(searchQuery)}`);
+      router.push(`/project?search=${encodeURIComponent(searchQuery)}`);
     }
   };
 

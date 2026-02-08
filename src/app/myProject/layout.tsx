@@ -22,7 +22,7 @@ export default function MyProjectLayout({
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <Spinner size="lg" label="กำลังตรวจสอบสิทธิ์..." />
+        <Spinner size="lg" label="??????????????????..." />
       </div>
     );
   }

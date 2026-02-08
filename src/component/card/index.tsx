@@ -87,5 +87,4 @@ const Index = ({ video }: CardProps) => {
     </div>
   );
 };
-
 export default Index;

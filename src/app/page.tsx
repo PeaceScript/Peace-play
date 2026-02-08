@@ -37,16 +37,9 @@ const Home = () => {
 
   useEffect(() => {
     if (authLoading) return;
-
-    // Optional: Allow non-logged in users to see the page but with empty video list
-    // OR fetch only if user is present.
-    // Given the new Security Rules, fetching without user will fail.
     
-    if (!user) {
-      setLoading(false);
-      return;
-    }
-
+    // Always fetch videos, user might be null but that is okay for public videos if rules allow,
+    // or we handle empty list.
     const fetchVideos = async () => {
       try {
         const data = await getPublicVideos(20);
@@ -68,11 +61,23 @@ const Home = () => {
           <Carousel videos={videos} />
         </div>
 
-        <div className="container mx-auto p-4">
-          <div className="flex justify-between mt-8 items-center mb-4">
+        <div className="container mx-auto">
+          <div className="flex justify-between mt-10 items-center mb-4">
             <div className="text-[#000000] text-[22px] lg:text-[32px] font-bold flex items-center gap-2">
-              <span className="text-4xl">🏆</span> 
-              10 อันดับยอดนิยมวันนี้
+              <span className="text-4xl"></span> 
+              10 ???????????????????
+            </div>
+            <div className="">
+              <p className="text-[#2F5D86] text-center mb-2 hidden md:block">
+                ?????????
+              </p>
+              <div className="flex gap-2 justify-center items-center">
+                <IconArrowLeft />
+                <div className=" bg-black w-[20px] h-[4px] rounded-xl"></div>
+                <div className=" bg-slate-300 w-[20px] h-[4px] rounded-xl"></div>
+                <div className=" bg-slate-300 w-[20px] h-[4px] rounded-xl"></div>
+                <IconArrowRight />
+              </div>
             </div>
           </div>
 
@@ -97,11 +102,6 @@ const Home = () => {
                  width: 400,
                  slidesPerView: 2,
               },
-              1024: {
-                spaceBetween: 20,
-                width: 450,
-                slidesPerView: 3,
-              },
               1440: {
                 spaceBetween: 30,
                 width: null, // Let it adapt
@@ -119,17 +119,17 @@ const Home = () => {
                   </SwiperSlide>
                 ))
             ) : (
-                 <SwiperSlide>ไม่พบข้อมูล</SwiperSlide>
+                 <SwiperSlide>???????????</SwiperSlide>
             )}
           </Swiper>
 
           <div className="flex justify-between mt-10 items-center mb-4">
             <div className="text-[#000000] text-[22px] lg:text-[32px]">
-              ยอดนิยม
+              ???????
             </div>
             <div className="">
               <p className="text-[#2F5D86] text-center mb-2 hidden md:block">
-                ดูทั้งหมด
+                ?????????
               </p>
               <div className="flex gap-2 justify-center items-center">
                 <IconArrowLeft />
@@ -170,17 +170,17 @@ const Home = () => {
                 </SwiperSlide>
               ))
             ) : (
-                <SwiperSlide>ไม่พบข้อมูล</SwiperSlide>
+                <SwiperSlide>???????????</SwiperSlide>
             )}
           </Swiper>
 
           <div className="flex justify-between mt-10 items-center mb-4">
             <div className="text-[#000000] text-[22px] lg:text-[32px]">
-              ใหม่ล่าสุด
+              ??????????
             </div>
             <div className="">
               <p className="text-[#2F5D86] text-center mb-2 hidden md:block">
-                ดูทั้งหมด
+                ?????????
               </p>
               <div className="flex gap-2 justify-center items-center">
                 <IconArrowLeft />
@@ -221,17 +221,17 @@ const Home = () => {
                 </SwiperSlide>
               ))
             ) : (
-                <SwiperSlide>ไม่พบข้อมูล</SwiperSlide>
+                <SwiperSlide>???????????</SwiperSlide>
             )}
           </Swiper>
 
           <div className="flex justify-between mt-10 items-center mb-4">
             <div className="text-[#000000] text-[22px] lg:text-[32px]">
-              ซี่รีส์ และโปรแกรมทีวี
+              ??????? ??????????????
             </div>
             <div className="">
               <p className="text-[#2F5D86] text-center mb-2 hidden md:block">
-                ดูทั้งหมด
+                ?????????
               </p>
               <div className="flex gap-2 justify-center items-center">
                 <IconArrowLeft />
@@ -272,17 +272,17 @@ const Home = () => {
                 </SwiperSlide>
               ))
             ) : (
-                <SwiperSlide>ไม่พบข้อมูล</SwiperSlide>
+                <SwiperSlide>???????????</SwiperSlide>
             )}
           </Swiper>
 
-          <div className="flex justify-between mt-10 items-center mb-4">
+           <div className="flex justify-between mt-10 items-center mb-4">
             <div className="text-[#000000] text-[22px] lg:text-[32px]">
-              ภาพยนต์ไทย
+              ???????????
             </div>
             <div className="">
               <p className="text-[#2F5D86] text-center mb-2 hidden md:block">
-                ดูทั้งหมด
+                ?????????
               </p>
               <div className="flex gap-2 justify-center items-center">
                 <IconArrowLeft />
@@ -323,18 +323,18 @@ const Home = () => {
                 </SwiperSlide>
               ))
             ) : (
-                <SwiperSlide>ไม่พบข้อมูล</SwiperSlide>
+                <SwiperSlide>???????????</SwiperSlide>
             )}
           </Swiper>
 
           <div className="mt-10">
             <div className="flex justify-between items-center">
               <div className="flex gap-2 items-center">
-                <h1 className="text-[#061118] text-[40px] ">ข่าวสาร</h1>
+                <h1 className="text-[#061118] text-[40px] ">???????</h1>
               </div>
               <a href="">
                 <div className="flex gap-2 items-center">
-                  <h3 className="text-[#2F5D86] text-[16px]">ดูทั้งหมด</h3>
+                  <h3 className="text-[#2F5D86] text-[16px]">?????????</h3>
                 </div>
               </a>
             </div>

@@ -11,7 +11,6 @@ function VideoPlayerContent() {
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
   const [video, setVideo] = useState<PeacePlayVideo | null>(null);
-  
   const [videoProgress, setVideoProgress] = useState<number>(0);
   const [videoDuration, setVideoDuration] = useState<number>();
   const [isPaused, setIsPaused] = useState(false);
