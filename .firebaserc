@@ -1,12 +1,12 @@
 {
   "projects": {
-    "default": "peace-script-ai"
+    "default": "peace-play-official"
   },
   "targets": {
-    "peace-script-ai": {
+    "peace-play-official": {
       "hosting": {
         "peace-play": [
-          "peace-play-official"
+          "peace-play-official-d6c9e"
         ]
       }
     }
