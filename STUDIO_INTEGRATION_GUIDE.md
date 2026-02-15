@@ -16,7 +16,7 @@
 
 <button 
   className="flex items-center gap-2 px-4 py-2 text-cyan-400 font-bold hover:bg-cyan-500/10 rounded-lg transition-all"
-  onClick={() => window.open("https://peace-play-official.web.app/", "_blank")}
+  onClick={() => window.open("https://peace-play-official-d6c9e.web.app/", "_blank")}
 >
   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
     <path d="M8 5v14l11-7z"/>
@@ -31,7 +31,7 @@
 <DropdownItem 
   key="peace_play"
   className="text-cyan-500 font-bold"
-  onClick={() => window.open("https://peace-play-official.web.app/", "_blank")}
+  onClick={() => window.open("https://peace-play-official-d6c9e.web.app/", "_blank")}
 >
    🎬 ไปที่ Peace Play
 </DropdownItem>
