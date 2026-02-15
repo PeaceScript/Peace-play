@@ -34,25 +34,54 @@ const Home = () => {
   }, [videos]);
 
   useEffect(() => {
+    let isActive = true;
     const loadingGuard = setTimeout(() => {
-      setLoading(false);
+      if (isActive) {
+        setLoading(false);
+      }
     }, 8000);
 
-    const fetchVideos = async () => {
+    const fetchVideos = async (attempt: number = 0) => {
       try {
         const data = await getPublicVideos(20);
-        setVideos(data);
+
+        if (!isActive) return;
+
+        if (data.length > 0) {
+          setVideos(data);
+          clearTimeout(loadingGuard);
+          setLoading(false);
+          return;
+        }
+
+        if (attempt < 2) {
+          setTimeout(() => {
+            if (isActive) {
+              fetchVideos(attempt + 1);
+            }
+          }, 900);
+        }
       } catch (error) {
         console.error("Failed to fetch videos", error);
+        if (attempt < 2 && isActive) {
+          setTimeout(() => {
+            if (isActive) {
+              fetchVideos(attempt + 1);
+            }
+          }, 900);
+        }
       } finally {
-        clearTimeout(loadingGuard);
-        setLoading(false);
+        if (attempt >= 2 && isActive) {
+          clearTimeout(loadingGuard);
+          setLoading(false);
+        }
       }
     };
 
     fetchVideos();
 
     return () => {
+      isActive = false;
       clearTimeout(loadingGuard);
     };
   }, []);
