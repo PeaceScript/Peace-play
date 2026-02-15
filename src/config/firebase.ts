@@ -8,13 +8,23 @@ import { getStorage } from 'firebase/storage';
 import { getFunctions } from 'firebase/functions';
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  apiKey: 'AIzaSyCtIhaUnsTiq0qZNosp_f5lAHvqsQ5xozQ',
+  authDomain: 'peace-play-official-d6c9e.firebaseapp.com',
+  projectId: 'peace-play-official',
+  storageBucket: 'peace-play-official.firebasestorage.app',
+  messagingSenderId: '114417080075',
+  appId: '1:114417080075:web:075aca46db66b8406ff40e',
+  measurementId: undefined,
+};
+
+const legacyFirebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_LEGACY_FIREBASE_API_KEY || 'AIzaSyCMZn8sVtszG_gl1NHjbViAnPy6JVeCHvo',
+  authDomain: process.env.NEXT_PUBLIC_LEGACY_FIREBASE_AUTH_DOMAIN || 'peace-script-ai.firebaseapp.com',
+  projectId: process.env.NEXT_PUBLIC_LEGACY_FIREBASE_PROJECT_ID || 'peace-script-ai',
+  storageBucket: process.env.NEXT_PUBLIC_LEGACY_FIREBASE_STORAGE_BUCKET || 'peace-script-ai.firebasestorage.app',
+  messagingSenderId: process.env.NEXT_PUBLIC_LEGACY_FIREBASE_MESSAGING_SENDER_ID || '624211706340',
+  appId: process.env.NEXT_PUBLIC_LEGACY_FIREBASE_APP_ID || '1:624211706340:web:b46101b954cd19535187f1',
+  measurementId: process.env.NEXT_PUBLIC_LEGACY_FIREBASE_MEASUREMENT_ID || undefined,
 };
 
 // Initialize Firebase
@@ -22,6 +32,8 @@ const firebaseConfig = {
 import { getApps, getApp } from 'firebase/app';
 
 const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+const legacyApp = getApps().find(existingApp => existingApp.name === 'legacy-peace-script')
+  || initializeApp(legacyFirebaseConfig, 'legacy-peace-script');
 
 // Initialize Services
 export const auth = getAuth(app);
@@ -30,6 +42,7 @@ setPersistence(auth, browserLocalPersistence).catch(() => {
   // If persistence fails (e.g. restricted environments), fall back to default
 });
 export const db = getFirestore(app);
+export const legacyDb = getFirestore(legacyApp);
 export const storage = getStorage(app);
 export const functions = getFunctions(app);
 

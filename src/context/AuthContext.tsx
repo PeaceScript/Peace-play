@@ -9,14 +9,16 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   logout: () => Promise<void>;
-  loginWithGoogle: () => Promise<void>;
+  loginWithGoogle: (redirectTo?: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   logout: async () => {},
-  loginWithGoogle: async () => {},
+  loginWithGoogle: async () => {
+    return;
+  },
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -35,13 +37,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => unsubscribe();
   }, []);
 
-  const loginWithGoogle = async () => {
+  const loginWithGoogle = async (redirectTo = "/") => {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-      router.push("/"); // Redirect to home after login
+      router.push(redirectTo);
     } catch (error) {
       console.error("Google login failed", error);
+      throw error;
     }
   };
 

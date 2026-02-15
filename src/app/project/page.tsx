@@ -12,13 +12,11 @@ import {
 import { ChevronDownIcon } from "@/component/icons";
 import { getPublicVideos } from "@/services/videoService";
 import { PeacePlayVideo } from "@/types/peacePlay";
-import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
 function ProjectContent() {
-  const { user, loading: authLoading } = useAuth();
   const searchParams = useSearchParams();
   const search = searchParams.get("search");
 
@@ -27,12 +25,9 @@ function ProjectContent() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (authLoading) return;
-
-    if (!user) {
+    const loadingGuard = setTimeout(() => {
       setLoading(false);
-      return;
-    }
+    }, 8000);
 
     const fetchVideos = async () => {
       try {
@@ -41,12 +36,17 @@ function ProjectContent() {
       } catch (error) {
         console.error("Failed to fetch videos", error);
       } finally {
+        clearTimeout(loadingGuard);
         setLoading(false);
       }
     };
 
     fetchVideos();
-  }, [user, authLoading]);
+
+    return () => {
+      clearTimeout(loadingGuard);
+    };
+  }, []);
 
   // Client-side filtering
   useEffect(() => {
@@ -63,7 +63,7 @@ function ProjectContent() {
     }
   }, [search, videos]);
 
-  if (loading || authLoading) {
+  if (loading) {
     return <div className="p-10 text-center text-gray-500">Loading...</div>;
   }
 
@@ -73,7 +73,7 @@ function ProjectContent() {
          {/* Search Header */}
          {search && (
             <div className="mb-6">
-                <h2 className="text-2xl font-bold">??????????: <span className="text-cyan-500">"{search}"</span></h2>
+                <h2 className="text-2xl font-bold">??????????: <span className="text-cyan-500">&quot;{search}&quot;</span></h2>
                 <p className="text-gray-400 text-sm">?? {filteredVideos.length} ??????</p>
             </div>
          )}

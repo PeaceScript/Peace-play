@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/config/firebase";
 import { useRouter } from "next/navigation";
@@ -13,8 +13,47 @@ const SignInPage = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [returnUrlParam, setReturnUrlParam] = useState<string | null>(null);
+  const [sourceParam, setSourceParam] = useState<string | null>(null);
   const router = useRouter();
-  const { loginWithGoogle } = useAuth();
+  const { loginWithGoogle, user, loading: authLoading } = useAuth();
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    setReturnUrlParam(params.get("returnUrl"));
+    setSourceParam(params.get("from"));
+  }, []);
+
+  const getSafeRedirect = () => {
+    if (sourceParam === "peace-script") {
+      return "/";
+    }
+
+    const rawReturnUrl = returnUrlParam;
+    if (!rawReturnUrl) return "/";
+
+    try {
+      const decoded = decodeURIComponent(rawReturnUrl);
+      const returnUrl = new URL(decoded);
+      const currentOrigin = typeof window !== "undefined" ? window.location.origin : "";
+
+      if (returnUrl.origin === currentOrigin) {
+        return returnUrl.toString();
+      }
+    } catch {
+      return "/";
+    }
+
+    return "/";
+  };
+
+  useEffect(() => {
+    if (authLoading) return;
+    if (user) {
+      router.replace(getSafeRedirect());
+    }
+  }, [authLoading, user, router, sourceParam, returnUrlParam]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +62,7 @@ const SignInPage = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("/"); // Redirect to home page after login
+      router.replace(getSafeRedirect());
     } catch (err: any) {
       // Handle explicit auth errors
       let errorMessage = "เกิดข้อผิดพลาดในการเข้าสู่ระบบ";
@@ -45,11 +84,21 @@ const SignInPage = () => {
 
   const handleGoogleLogin = async () => {
     try {
-        await loginWithGoogle();
-        // Redirect handled in AuthContext logic usually, or we can push here if needed
-        router.push("/");
-    } catch (error) {
-        console.error("Google login error", error);
+        setError("");
+        await loginWithGoogle(getSafeRedirect());
+    } catch (err: any) {
+        let errorMessage = "ไม่สามารถเข้าสู่ระบบด้วย Google ได้";
+
+        if (err?.code === "auth/popup-closed-by-user") {
+          errorMessage = "คุณปิดหน้าต่าง Google Login ก่อนยืนยัน";
+        } else if (err?.code === "auth/popup-blocked") {
+          errorMessage = "เบราว์เซอร์บล็อก popup กรุณาอนุญาต popup แล้วลองอีกครั้ง";
+        } else if (err?.code === "auth/unauthorized-domain") {
+          errorMessage = "โดเมนนี้ยังไม่ได้รับอนุญาตใน Firebase Authentication";
+        }
+
+        setError(errorMessage);
+        console.error("Google login error", err);
     }
   }
 

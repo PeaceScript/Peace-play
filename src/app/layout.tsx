@@ -3,9 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { NextUIProvider } from "@nextui-org/system";
 import "@fontsource/prompt";
-import Script from "next/script";
 import Menu from "@/component/menu";
-import Link from "next/link";
 import { AuthProvider } from "@/context/AuthContext";
 
 // import LayoutProject from "@/component/layout-provider";
@@ -24,14 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* <head>
-        <Link
-          href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css"
-          rel="stylesheet"
-        />
-      </head> */}
       <body className={inter.className}>
-        <Script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></Script>
         <NextUIProvider>
           <AuthProvider>
             <Menu>{children}</Menu>

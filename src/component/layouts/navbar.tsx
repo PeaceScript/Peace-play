@@ -1,5 +1,6 @@
 import React from "react";
 import { useAuth } from "@/context/AuthContext";
+import { openExternalWithSso } from "@/utils/sso";
 import { Avatar, Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -7,6 +8,15 @@ import { useRouter } from "next/navigation";
 const NavBarTop = ({ hasSidebar = false }: { hasSidebar?: boolean }) => {
   const { user, logout } = useAuth();
   const router = useRouter();
+  const appName = process.env.NEXT_PUBLIC_APP_NAME || "peace-play";
+
+  const handleNavigateToExternalApp = async (url: string) => {
+    await openExternalWithSso({
+      user,
+      targetUrl: url,
+      sourceApp: appName,
+    });
+  };
 
   return (
     <nav className="fixed top-0 z-50 w-full bg-[#050505]/80 backdrop-blur-md border-b border-white/5 transition-all duration-300">
@@ -17,7 +27,6 @@ const NavBarTop = ({ hasSidebar = false }: { hasSidebar?: boolean }) => {
               <button
                 data-drawer-target="logo-sidebar"
                 data-drawer-toggle="logo-sidebar"
-                aria-controls="logo-sidebar"
                 type="button"
                 className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 darks:text-gray-400 darks:hover:bg-gray-700 darks:focus:ring-gray-600"
               >
@@ -93,31 +102,38 @@ const NavBarTop = ({ hasSidebar = false }: { hasSidebar?: boolean }) => {
                   variant="flat" 
                   className="bg-white rounded-xl shadow-xl text-black"
                 >
-                  <DropdownItem key="profile" className="h-14 gap-2 border-b border-gray-100">
+                  <DropdownItem key="profile" textValue="ข้อมูลผู้ใช้" className="h-14 gap-2 border-b border-gray-100">
                     <p className="font-semibold text-black">เข้าสู่ระบบโดย</p>
                     <p className="font-semibold text-gray-600">{user.email}</p>
                   </DropdownItem>
-                  <DropdownItem key="my_project" className="text-gray-800" onClick={() => router.push("/myProject")}>
+                  <DropdownItem key="my_project" textValue="โปรเจคของฉัน" className="text-gray-800" onClick={() => router.push("/myProject")}>
                     โปรเจคของฉัน
                   </DropdownItem>
-                  <DropdownItem key="settings" className="text-gray-800" onClick={() => router.push("/myProject/profile/editProfile")}>
+                  <DropdownItem 
+                    key="settings" 
+                    textValue="ตั้งค่าส่วนตัว"
+                    className="text-gray-800" 
+                    onClick={() => router.push("/myProject/profile/editProfile")}
+                  >
                     ตั้งค่าส่วนตัว
                   </DropdownItem>
                   <DropdownItem 
                     key="peace_studio" 
+                    textValue="Peace Studio"
                     className="text-cyan-600 font-bold"
-                    onClick={() => window.open("https://peace-script-ai.web.app/", "_blank")}
+                    onClick={() => handleNavigateToExternalApp(process.env.NEXT_PUBLIC_STUDIO_URL || "https://peace-script-ai.web.app/")}
                   >
-                    🎬 Peace Studio
+                    Peace Studio
                   </DropdownItem>
                   <DropdownItem 
-                    key="peace_market" 
-                    className="text-emerald-600 font-bold"
-                    onClick={() => window.open(process.env.NEXT_PUBLIC_MARKET_URL || "http://localhost:3001", "_blank")}
+                    key="market_peace" 
+                    textValue="Market Peace"
+                    className="text-[#FFD700] font-bold"
+                    onClick={() => handleNavigateToExternalApp(process.env.NEXT_PUBLIC_MARKET_URL || "https://market-peace.web.app/")}
                   >
-                    🛒 Market
+                    Market Peace
                   </DropdownItem>
-                  <DropdownItem key="logout" className="text-red-500" color="danger" onClick={logout}>
+                  <DropdownItem key="logout" textValue="ออกจากระบบ" className="text-red-500" color="danger" onClick={logout}>
                     ออกจากระบบ
                   </DropdownItem>
                 </DropdownMenu>

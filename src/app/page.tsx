@@ -20,11 +20,9 @@ import {
 } from "swiper/modules";
 import { getPublicVideos } from "@/services/videoService";
 import { PeacePlayVideo } from "@/types/peacePlay";
-import { useAuth } from "@/context/AuthContext";
 
 const Home = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { user, loading: authLoading } = useAuth();
   const [videos, setVideos] = useState<PeacePlayVideo[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -36,10 +34,10 @@ const Home = () => {
   }, [videos]);
 
   useEffect(() => {
-    if (authLoading) return;
-    
-    // Always fetch videos, user might be null but that is okay for public videos if rules allow,
-    // or we handle empty list.
+    const loadingGuard = setTimeout(() => {
+      setLoading(false);
+    }, 8000);
+
     const fetchVideos = async () => {
       try {
         const data = await getPublicVideos(20);
@@ -47,12 +45,17 @@ const Home = () => {
       } catch (error) {
         console.error("Failed to fetch videos", error);
       } finally {
+        clearTimeout(loadingGuard);
         setLoading(false);
       }
     };
 
     fetchVideos();
-  }, [user, authLoading]);
+
+    return () => {
+      clearTimeout(loadingGuard);
+    };
+  }, []);
 
   return (
     <div className="">
